@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from datetime import datetime, timezone
 
 from worldcup_model import odds_feed as feed
 from worldcup_model.host import HOSTS_2026, is_host_game
@@ -31,11 +32,21 @@ NAME_FIX = {"USA": "United States", "Korea Republic": "South Korea",
             "IR Iran": "Iran", "Czechia": "Czech Republic"}
 
 MIN_EV = 0.02
+MAX_EV = 0.20   # above this on a 40-book market = stale/bad single-book price, not value
 KELLY, MAX_STAKE_FRAC = 0.25, 0.05
 
 
 def _odds_fair(consensus: dict) -> dict:
     return {k: 1.0 / v for k, v in consensus.items()}  # probs -> pseudo decimal
+
+
+def _is_upcoming(ev) -> bool:
+    """True if the match hasn't kicked off — live odds vs a pre-match model is noise."""
+    try:
+        t = datetime.fromisoformat(ev.commence_time.replace("Z", "+00:00"))
+        return t > datetime.now(timezone.utc)
+    except (ValueError, AttributeError):
+        return True
 
 
 def cmd_value(events, model, bankroll):
@@ -66,6 +77,8 @@ def cmd_value(events, model, bankroll):
             if price > 13.0:        # extreme longshots: de-vig noise + loose books
                 continue
             ev_pct = fair[sel] * price - 1
+            if ev_pct > MAX_EV:     # implausibly large -> one book's bad/stale price
+                continue
             # Longshots: de-vig is unreliable below ~8%; require a bigger margin.
             thresh = MIN_EV if fair[sel] >= 0.08 else 0.05
             if ev_pct >= thresh:
@@ -90,6 +103,8 @@ def main() -> None:
     ap.add_argument("--regions", default="eu,uk")
     ap.add_argument("--list-sports", action="store_true")
     ap.add_argument("--value", action="store_true", help="scan for line-shopping value")
+    ap.add_argument("--include-live", action="store_true",
+                    help="also include already-started matches (live odds)")
     ap.add_argument("--bankroll", type=float, default=10000.0)
     ap.add_argument("--api-key", default=None)
     args = ap.parse_args()
@@ -104,8 +119,14 @@ def main() -> None:
         mkts = "h2h" if args.value else "h2h,totals"
         events, quota = feed.fetch_odds(args.sport, regions=args.regions,
                                         markets=mkts, api_key=args.api_key)
-        print(f"{len(events)} events with odds  |  quota left: "
-              f"{quota.get('x-requests-remaining')}  (used {quota.get('x-requests-used')})\n")
+        total = len(events)
+        if not args.include_live:
+            events = [e for e in events if _is_upcoming(e)]
+        skipped = total - len(events)
+        print(f"{len(events)} upcoming events with odds"
+              + (f" ({skipped} live/started skipped)" if skipped else "")
+              + f"  |  quota left: {quota.get('x-requests-remaining')}"
+              f"  (used {quota.get('x-requests-used')})\n")
 
         for ev in events:
             cons = feed.consensus_1x2(ev)
