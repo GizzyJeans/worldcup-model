@@ -1,10 +1,10 @@
-# World Cup value scan — 2026-06-19 08:48 UTC
+# World Cup value scan — 2026-06-19 08:51 UTC
 
 Line-shop discrepancies vs the sharp consensus (model anchored to market).
 These are small, perishable, and not a proven edge — verify before betting.
 
 ```
-44 events with odds  |  quota left: 492  (used 8)
+44 upcoming events with odds  |  quota left: 484  (used 16)
 
 USA v Australia   (41 books)
   consensus:  H 59%  D 24%  A 18%
@@ -14,9 +14,9 @@ Scotland v Morocco   (41 books)
   best price: HOME 10.50 [Marathon B]  DRAW 3.75 [Unibet (NL]  AWAY 4.65 [Marathon B]
 Brazil v Haiti   (41 books)
   consensus:  H 85%  D 10%  A 4%
-  best price: HOME 3.40 [Marathon B]  DRAW 12.80 [1xBet]  AWAY 29.00 [Unibet (NL]
+  best price: HOME 3.40 [Marathon B]  DRAW 12.50 [Betfair]  AWAY 30.00 [1xBet]
 Turkey v Paraguay   (41 books)
-  consensus:  H 47%  D 29%  A 24%
+  consensus:  H 46%  D 29%  A 25%
   best price: HOME 5.25 [Marathon B]  DRAW 3.51 [1xBet]  AWAY 9.20 [Marathon B]
 Netherlands v Sweden   (40 books)
   consensus:  H 55%  D 25%  A 20%
@@ -36,9 +36,9 @@ Spain v Saudi Arabia   (41 books)
 Belgium v Iran   (40 books)
   consensus:  H 67%  D 20%  A 12%
   best price: HOME 1.48 [1xBet]  DRAW 5.00 [Unibet (NL]  AWAY 8.50 [Unibet (NL]
-Uruguay v Cape Verde   (40 books)
+Uruguay v Cape Verde   (39 books)
   consensus:  H 65%  D 23%  A 12%
-  best price: HOME 1.52 [Betsson]  DRAW 4.40 [Unibet (NL]  AWAY 9.00 [Coolbet]
+  best price: HOME 1.52 [Betsson]  DRAW 4.40 [Unibet (NL]  AWAY 9.00 [Smarkets]
 New Zealand v Egypt   (40 books)
   consensus:  H 17%  D 24%  A 59%
   best price: HOME 6.20 [Smarkets]  DRAW 4.24 [Pinnacle]  AWAY 1.65 [1xBet]
@@ -89,7 +89,7 @@ Curaçao v Ivory Coast   (34 books)
   best price: HOME 29.00 [1xBet]  DRAW 9.50 [1xBet]  AWAY 1.22 [BoyleSport]
 Ecuador v Germany   (33 books)
   consensus:  H 19%  D 25%  A 56%
-  best price: HOME 5.40 [Matchbook]  DRAW 4.10 [Smarkets]  AWAY 1.78 [GTbets]
+  best price: HOME 5.40 [Smarkets]  DRAW 4.10 [Smarkets]  AWAY 1.78 [GTbets]
 Japan v Sweden   (33 books)
   consensus:  H 44%  D 28%  A 28%
   best price: HOME 2.24 [Smarkets]  DRAW 3.60 [Betfair]  AWAY 3.55 [BetOnline.]
@@ -140,27 +140,20 @@ Jordan v Argentina   (32 books)
   best price: HOME 15.25 [Marathon B]  DRAW 7.50 [Tipico]  AWAY 1.24 [Smarkets]
 
 Value scan (model anchored to sharp market, line-shopped):
-  Brazil v Haiti  HOME  @ 3.40 (Marathon Bet)  fair 87.1%  EV +196.0%  stake 500
-  USA v Australia  HOME  @ 4.70 (Marathon Bet)  fair 57.6%  EV +170.6%  stake 500
-  Scotland v Morocco  AWAY  @ 4.65 (Marathon Bet)  fair 55.6%  EV +158.6%  stake 500
-  Turkey v Paraguay  HOME  @ 5.25 (Marathon Bet)  fair 45.9%  EV +141.0%  stake 500
-  Turkey v Paraguay  AWAY  @ 9.20 (Marathon Bet)  fair 25.4%  EV +133.7%  stake 408
-  USA v Australia  AWAY  @ 10.75 (Marathon Bet)  fair 19.1%  EV +105.6%  stake 271
-  Scotland v Morocco  HOME  @ 10.50 (Marathon Bet)  fair 17.0%  EV +78.1%  stake 206
   Senegal v Iraq  AWAY  @ 12.00 (BoyleSports)  fair 10.0%  EV +19.8%  stake 45
   Ecuador v Curaçao  DRAW  @ 11.50 (Unibet (NL))  fair 10.4%  EV +19.7%  stake 47
   Scotland v Brazil  HOME  @ 8.50 (Coolbet)  fair 13.9%  EV +18.0%  stake 60
   Panama v England  HOME  @ 13.00 (Coolbet)  fair 9.0%  EV +17.2%  stake 36
   France v Iraq  DRAW  @ 13.00 (Tipico)  fair 8.9%  EV +15.7%  stake 33
   Germany v Ivory Coast  AWAY  @ 6.75 (Unibet (NL))  fair 17.1%  EV +15.6%  stake 68
-  Brazil v Haiti  DRAW  @ 12.80 (1xBet)  fair 9.0%  EV +14.9%  stake 32
+  Brazil v Haiti  DRAW  @ 12.50 (Betfair)  fair 9.0%  EV +13.1%  stake 28
   Spain v Saudi Arabia  DRAW  @ 11.50 (Betfair)  fair 9.8%  EV +12.4%  stake 30
   Belgium v Iran  AWAY  @ 8.50 (Unibet (NL))  fair 13.1%  EV +11.8%  stake 39
-  Ecuador v Germany  HOME  @ 5.40 (Matchbook)  fair 20.2%  EV +9.1%  stake 52
   Portugal v Uzbekistan  DRAW  @ 7.80 (Betfair)  fair 14.0%  EV +8.9%  stake 33
   Tunisia v Netherlands  HOME  @ 10.50 (Unibet (SE))  fair 10.3%  EV +8.5%  stake 22
   Czech Republic v Mexico  HOME  @ 4.00 (BoyleSports)  fair 27.1%  EV +8.4%  stake 70
-  Senegal v Iraq  DRAW  @ 5.70 (Tipico)  fair 18.8%  EV +6.9%  stake 37
+  Ecuador v Germany  HOME  @ 5.40 (Smarkets)  fair 19.9%  EV +7.6%  stake 43
+  Senegal v Iraq  DRAW  @ 5.70 (Tipico)  fair 18.7%  EV +6.9%  stake 37
   Curaçao v Ivory Coast  DRAW  @ 9.50 (1xBet)  fair 11.2%  EV +6.5%  stake 19
   Belgium v Iran  DRAW  @ 5.00 (Unibet (NL))  fair 21.3%  EV +6.4%  stake 40
   Paraguay v Australia  AWAY  @ 3.60 (Coolbet)  fair 29.4%  EV +6.0%  stake 58
@@ -175,9 +168,9 @@ Value scan (model anchored to sharp market, line-shopped):
   Morocco v Haiti  DRAW  @ 6.10 (Unibet (FR))  fair 17.0%  EV +3.7%  stake 18
   Croatia v Ghana  DRAW  @ 4.12 (BetOnline.ag)  fair 25.1%  EV +3.4%  stake 27
   Colombia v DR Congo  AWAY  @ 7.80 (Betfair)  fair 13.3%  EV +3.4%  stake 12
-  Ecuador v Germany  DRAW  @ 4.10 (Smarkets)  fair 25.1%  EV +3.0%  stake 24
+  Ecuador v Germany  DRAW  @ 4.10 (Smarkets)  fair 25.2%  EV +3.3%  stake 27
   New Zealand v Belgium  DRAW  @ 6.50 (Casumo)  fair 15.8%  EV +2.9%  stake 13
-  Scotland v Morocco  DRAW  @ 3.75 (Unibet (NL))  fair 27.4%  EV +2.8%  stake 26
+  Scotland v Morocco  DRAW  @ 3.75 (Unibet (NL))  fair 27.4%  EV +2.9%  stake 26
   Norway v France  HOME  @ 4.50 (BoyleSports)  fair 22.8%  EV +2.7%  stake 20
   Jordan v Algeria  HOME  @ 6.50 (Unibet (NL))  fair 15.8%  EV +2.5%  stake 11
   Turkey v USA  HOME  @ 2.90 (Coolbet)  fair 35.3%  EV +2.4%  stake 31
@@ -185,10 +178,10 @@ Value scan (model anchored to sharp market, line-shopped):
   Japan v Sweden  HOME  @ 2.24 (Smarkets)  fair 45.6%  EV +2.2%  stake 45
   Croatia v Ghana  AWAY  @ 6.25 (Coolbet)  fair 16.3%  EV +2.2%  stake 10
   Cape Verde v Saudi Arabia  DRAW  @ 3.84 (BetOnline.ag)  fair 26.6%  EV +2.2%  stake 19
-  Uruguay v Spain  HOME  @ 6.50 (Tipico)  fair 15.7%  EV +2.1%  stake 10
+  Uruguay v Spain  HOME  @ 6.50 (Tipico)  fair 15.7%  EV +2.1%  stake 9
   Scotland v Brazil  DRAW  @ 5.30 (Matchbook)  fair 19.2%  EV +2.0%  stake 12
 
-  47 prices beat the sharp line. These are line-shop discrepancies, not model edges — small, perishable, verify before betting.
+  40 prices beat the sharp line. These are line-shop discrepancies, not model edges — small, perishable, verify before betting.
 
-quota remaining: 492
+quota remaining: 484
 ```
