@@ -10,6 +10,25 @@ criterion**.
 > Built for analysis and education. Betting carries risk; a model edge is a
 > long-run statistical expectation, not a guaranteed outcome. Bet responsibly.
 
+## Quick start on a new machine
+
+Prerequisites: Python 3.12+, git (and `gh` to clone this private repo).
+
+```bash
+gh repo clone GizzyJeans/worldcup-model      # or: git clone <https-url>
+cd worldcup-model
+pip install -r requirements.txt
+python install_skill.py                       # registers the /worldcup-betting skill
+python predict.py predict --home Spain --away England --neutral   # verify
+```
+
+`model.json` is committed so prediction works immediately; `data/` auto-downloads.
+Optional: `python fetch_odds_data.py` (validation scripts), and set `ODDS_API_KEY`
+for live odds. No-install option: open in **GitHub Codespaces** (auto-configured).
+
+**Daily sync:** `git pull` before working; `git add -A && git commit -m "..." && git push`
+after. If you retrain (`python train.py`), push the new `model.json`.
+
 ## How it works
 
 **Data** — `data/results.csv` from the open
