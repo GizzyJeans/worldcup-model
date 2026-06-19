@@ -3,7 +3,7 @@
     python simulate.py [--sims 20000] [--group A] [--full]
 
 Uses results already played plus the model to Monte-Carlo the remaining group
-games and the knockout rounds (neutral random draw — see tournament.py).
+games and the knockout rounds (official 2026 bracket — see tournament.py).
 """
 
 from __future__ import annotations

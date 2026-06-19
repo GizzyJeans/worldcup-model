@@ -176,9 +176,14 @@ python simulate.py --sims 20000          # each team's qualify/QF/SF/final/cup o
 python simulate.py --group A             # one group's table
 ```
 
-Reconstructs the 12 groups from the fixtures, seeds tables with results already
-played, then Monte-Carlos the remaining group games (model Poisson, FIFA
-tiebreakers) and the knockout (neutral random draw of the 32 qualifiers).
+Reconstructs the 12 groups from the fixtures (labelled with their real FIFA
+letters A–L from the official draw), seeds tables with results already played,
+then Monte-Carlos the remaining group games (model Poisson, FIFA tiebreakers)
+and the knockout through the **official 2026 bracket**: group winners and
+runners-up take their fixed Round-of-32 slots, the 8 best third-placed teams are
+allocated to winners via FIFA's eligibility table, and the R16→QF→SF→final tree
+is the published one — so group winners get real seeding protection and a team's
+path matches the actual tournament.
 
 ## Validation summary
 
@@ -213,6 +218,5 @@ the live-odds and injury features there.
 ## Notes & extensions
 
 - Team names match the dataset exactly (e.g. `South Korea`, `United States`).
-- Possible extensions: the exact official knockout bracket (vs the neutral
-  random draw used now), bivariate-Poisson goal correlation, and squad/lineup-
-  based ratings.
+- Possible extensions: bivariate-Poisson goal correlation and squad/lineup-
+  based ratings. (The official knockout bracket is now implemented.)
