@@ -127,11 +127,20 @@ def label_groups(groups: list[list[str]]) -> dict[str, str]:
     return out
 
 
-def _knockout_advance_prob(model, ti: str, tj: str) -> float:
-    """P(ti beats tj) at a neutral knockout (ET/pens weighted by strength)."""
+def _knockout_advance_prob(model, ti: str, tj: str,
+                           inj_i: tuple[float, float] = (0.0, 0.0),
+                           inj_j: tuple[float, float] = (0.0, 0.0)) -> float:
+    """P(ti beats tj) at a neutral knockout (ET/pens weighted by strength).
+
+    inj_* are each team's (own-goal reduction, opponent-goal increase) from
+    absences: ti scores less if its attackers are out and more if tj's
+    defenders are out."""
+    own_i, opp_i = inj_i
+    own_j, opp_j = inj_j
     lam, mu = model.expected_goals(ti, tj, neutral=True, host=False)
     bonus = (int(ti in HOSTS_2026) - int(tj in HOSTS_2026)) * model.host_adv
-    lam, mu = max(0.05, lam + bonus / 2), max(0.05, mu - bonus / 2)
+    lam = max(0.05, lam + bonus / 2 + opp_j - own_i)
+    mu = max(0.05, mu - bonus / 2 + opp_i - own_j)
     mat = score_matrix(lam, mu, model.dc.rho)
     n = mat.shape[0]
     iu = np.triu_indices(n, 1)
@@ -145,7 +154,8 @@ def _knockout_advance_prob(model, ti: str, tj: str) -> float:
 class TournamentSimulator:
     ROUNDS = ["reach_R16", "reach_QF", "reach_SF", "reach_final", "win_cup"]
 
-    def __init__(self, model, wc_played: pd.DataFrame, wc_upcoming: pd.DataFrame):
+    def __init__(self, model, wc_played: pd.DataFrame, wc_upcoming: pd.DataFrame,
+                 injuries: dict[str, list] | None = None):
         self.model = model
         groups = reconstruct_groups(pd.concat([wc_played, wc_upcoming]))
         self.group_of = label_groups(groups)        # team -> real FIFA letter
@@ -157,6 +167,23 @@ class TournamentSimulator:
         self.group_letters = [self.group_of[g[0]] for g in groups]
         self.groups_idx = [np.array([self.idx[t] for t in g]) for g in groups]
 
+        # Per-team absence penalties (own-goal reduction, opponent-goal rise),
+        # applied to every future game that team plays. Unrecognised injured
+        # players default to ~negligible "squad" impact; known stars keep theirs.
+        self.inj_own = np.zeros(self.n)
+        self.inj_opp = np.zeros(self.n)
+        self.injured_teams: dict[str, tuple[list, float, float]] = {}
+        if injuries:
+            from .squad import absence_penalty
+            for team, players in injuries.items():
+                i = self.idx.get(team)
+                if i is None or not players:
+                    continue
+                own, opp = absence_penalty(list(players), default_tier="squad")
+                self.inj_own[i], self.inj_opp[i] = own, opp
+                if own or opp:
+                    self.injured_teams[team] = (list(players), own, opp)
+
         # Base table from games already played.
         self.base_pts = np.zeros(self.n)
         self.base_gd = np.zeros(self.n)
@@ -166,23 +193,28 @@ class TournamentSimulator:
                         self.idx[r.home_team], self.idx[r.away_team],
                         int(r.home_score), int(r.away_score))
 
-        # Remaining group fixtures with model expected goals.
+        # Remaining group fixtures with model expected goals (+ injury shift).
         h, a, lam, mu = [], [], [], []
         for r in wc_upcoming.itertuples(index=False):
             host = is_host_game(r.home_team, bool(r.neutral))
             lg, mg = model.expected_goals(r.home_team, r.away_team, bool(r.neutral), host)
-            h.append(self.idx[r.home_team]); a.append(self.idx[r.away_team])
+            hi, ai = self.idx[r.home_team], self.idx[r.away_team]
+            lg = max(0.05, lg + self.inj_opp[ai] - self.inj_own[hi])
+            mg = max(0.05, mg + self.inj_opp[hi] - self.inj_own[ai])
+            h.append(hi); a.append(ai)
             lam.append(lg); mu.append(mg)
         self.rh, self.ra = np.array(h, dtype=int), np.array(a, dtype=int)
         self.rlam, self.rmu = np.array(lam), np.array(mu)
 
-        # Pairwise knockout advance-probability matrix.
+        # Pairwise knockout advance-probability matrix (with injury shifts).
         self.adv = np.full((self.n, self.n), 0.5)
         for i in range(self.n):
             for j in range(self.n):
                 if i != j:
                     self.adv[i, j] = _knockout_advance_prob(
-                        model, self.teams[i], self.teams[j])
+                        model, self.teams[i], self.teams[j],
+                        (self.inj_own[i], self.inj_opp[i]),
+                        (self.inj_own[j], self.inj_opp[j]))
 
         self._alloc_cache: dict[frozenset, dict[int, str]] = {}
 

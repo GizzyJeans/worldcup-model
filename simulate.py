@@ -28,12 +28,47 @@ def _pct(x: float) -> str:
     return "  -  " if x < 0.0005 else f"{100 * x:4.1f}%"
 
 
+def _load_injuries(args) -> dict | None:
+    """Injuries dict from a JSON file or a live API-Football fetch, or None."""
+    if args.injuries_file:
+        import json
+        with open(args.injuries_file, encoding="utf-8") as f:
+            return json.load(f)
+    if args.injuries:
+        from worldcup_model.squad import fetch_injuries
+        try:
+            return fetch_injuries()
+        except RuntimeError as e:
+            raise SystemExit(str(e))
+    return None
+
+
+def _report_injuries(sim, injuries: dict | None) -> None:
+    """Show which teams had absences applied (and any teams we couldn't match)."""
+    if not injuries:
+        return
+    if sim.injured_teams:
+        print("\nInjuries/suspensions applied (expected-goals impact):")
+        for team, (players, own, opp) in sorted(sim.injured_teams.items()):
+            shown = ", ".join(players[:4]) + ("..." if len(players) > 4 else "")
+            print(f"  {team:<16} {len(players):>2} out  "
+                  f"-{own:.2f} own / +{opp:.2f} opp xG   {shown}")
+    unmatched = sorted(t for t, p in injuries.items() if p and t not in sim.idx)
+    if unmatched:
+        print(f"  ({len(unmatched)} non-tournament/unmatched teams ignored: "
+              f"{', '.join(unmatched[:6])}{'...' if len(unmatched) > 6 else ''})")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--sims", type=int, default=20000)
     ap.add_argument("--group", default=None, help="show one group's table (A-L)")
     ap.add_argument("--full", action="store_true", help="show all 48 teams")
+    ap.add_argument("--injuries", action="store_true",
+                    help="auto-fetch injuries/suspensions (needs API_FOOTBALL_KEY)")
+    ap.add_argument("--injuries-file", default=None,
+                    help="JSON {team: [players out]} to apply (offline alternative)")
     ap.add_argument("--model", default=MODEL_PATH)
     args = ap.parse_args()
 
@@ -45,9 +80,12 @@ def main() -> None:
     played = wc[wc["home_score"].notna()]
     upcoming = wc[wc["home_score"].isna()]
 
-    sim = TournamentSimulator(model, played, upcoming)
+    injuries = _load_injuries(args)
+    sim = TournamentSimulator(model, played, upcoming, injuries=injuries)
     print(f"Simulating from current state: {len(played)} group games played, "
-          f"{len(upcoming)} remaining.  {args.sims:,} simulations.\n")
+          f"{len(upcoming)} remaining.  {args.sims:,} simulations.")
+    _report_injuries(sim, injuries)
+    print()
     res = sim.run(n_sims=args.sims)
 
     if args.group:

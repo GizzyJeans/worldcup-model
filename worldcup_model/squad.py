@@ -47,26 +47,32 @@ ROSTER: dict[str, tuple[str, str, str]] = {
 }
 
 
-def player_impact(name: str, tier: str | None = None, side: str = "att") -> tuple[float, str]:
-    """Goal impact + side for a player; falls back to `tier` (default 'key')."""
+def player_impact(name: str, tier: str | None = None, side: str = "att",
+                  default_tier: str = "key") -> tuple[float, str]:
+    """Goal impact + side for a player.
+
+    A name in ROSTER uses its known tier; otherwise we fall back to `tier` (or
+    `default_tier` when none is given). Live auto-fetch passes default_tier=
+    'squad' so an unrecognised injured player counts as ~nothing while a known
+    talisman/star still gets full weight."""
     if name in ROSTER:
         _, t, s = ROSTER[name]
         return TIER_IMPACT[t], s
-    return TIER_IMPACT.get(tier or "key", TIER_IMPACT["key"]), side
+    return TIER_IMPACT.get(tier or default_tier, TIER_IMPACT["key"]), side
 
 
-def absence_penalty(absent: list) -> tuple[float, float]:
+def absence_penalty(absent: list, default_tier: str = "key") -> tuple[float, float]:
     """Net (own-goals-reduction, opponent-goals-increase) for a team's absences.
 
-    `absent` items are either a player name (looked up / defaulted to 'key') or
-    a (name, tier, side) tuple for manual control."""
+    `absent` items are either a player name (looked up / defaulted to
+    `default_tier`) or a (name, tier, side) tuple for manual control."""
     own = opp = 0.0
     for a in absent:
         if isinstance(a, (tuple, list)):
             name, tier, side = (list(a) + ["key", "att"])[:3]
-            imp, s = player_impact(name, tier, side)
+            imp, s = player_impact(name, tier, side, default_tier)
         else:
-            imp, s = player_impact(a)
+            imp, s = player_impact(a, default_tier=default_tier)
         if s == "def":
             opp += imp
         else:
@@ -74,11 +80,27 @@ def absence_penalty(absent: list) -> tuple[float, float]:
     return min(own, CAP), min(opp, CAP)
 
 
+# API-Football team names -> our dataset spellings (so fetched injuries match
+# the team names used by the model and tournament simulator).
+TEAM_ALIASES = {
+    "USA": "United States", "Korea Republic": "South Korea",
+    "IR Iran": "Iran", "Côte d'Ivoire": "Ivory Coast",
+    "Czechia": "Czech Republic", "Türkiye": "Turkey", "Turkiye": "Turkey",
+    "Cabo Verde": "Cape Verde", "Curacao": "Curaçao",
+}
+
+
+def normalize_team(name: str) -> str:
+    """Map an API-Football team name to the dataset spelling."""
+    return TEAM_ALIASES.get(name, name)
+
+
 # ---- optional auto-fetch (API-Football v3) --------------------------------
 def fetch_injuries(league: int = 1, season: int = 2026,
                    api_key: str | None = None) -> dict[str, list[str]]:
     """Current injuries/suspensions per team via API-Football. Needs a free key
-    in API_FOOTBALL_KEY. Returns {team_name: [player names out]}."""
+    in API_FOOTBALL_KEY. Returns {team_name: [player names out]} with team names
+    normalised to the dataset spelling and players de-duplicated."""
     key = api_key or os.environ.get("API_FOOTBALL_KEY")
     if not key:
         raise RuntimeError("No API_FOOTBALL_KEY set. Get a free key at "
@@ -95,5 +117,7 @@ def fetch_injuries(league: int = 1, season: int = 2026,
         team = item.get("team", {}).get("name")
         player = item.get("player", {}).get("name")
         if team and player:
-            out.setdefault(team, []).append(player)
+            out.setdefault(normalize_team(team), [])
+            if player not in out[normalize_team(team)]:
+                out[normalize_team(team)].append(player)
     return out

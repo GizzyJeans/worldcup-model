@@ -174,6 +174,8 @@ from data (our dataset has no player info) — verify rosters and tune before us
 ```bash
 python simulate.py --sims 20000          # each team's qualify/QF/SF/final/cup odds
 python simulate.py --group A             # one group's table
+python simulate.py --injuries            # apply live injuries (needs API_FOOTBALL_KEY)
+python simulate.py --injuries-file out.json   # apply injuries from a JSON file
 ```
 
 Reconstructs the 12 groups from the fixtures (labelled with their real FIFA
@@ -184,6 +186,13 @@ runners-up take their fixed Round-of-32 slots, the 8 best third-placed teams are
 allocated to winners via FIFA's eligibility table, and the R16→QF→SF→final tree
 is the published one — so group winners get real seeding protection and a team's
 path matches the actual tournament.
+
+With `--injuries` (or `--injuries-file '{"Team": ["Player", ...]}'`) each team's
+absences shift its expected goals for *every* remaining game — group and
+knockout — so a talisman injury ripples through the whole simulation. Known
+stars use their `squad.py` tier; unrecognised auto-fetched players default to
+~negligible impact (we can't gauge their importance). A summary lists the
+applied teams, their goal impact, and any names that couldn't be matched.
 
 ## Validation summary
 
