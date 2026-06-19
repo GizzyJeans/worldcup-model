@@ -1,0 +1,14 @@
+{
+  "name": "worldcup-model",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "pip install -r requirements.txt && python install_skill.py || true",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  },
+  "remoteEnv": {
+    "ODDS_API_KEY": "${localEnv:ODDS_API_KEY}",
+    "API_FOOTBALL_KEY": "${localEnv:API_FOOTBALL_KEY}"
+  }
+}

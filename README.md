@@ -180,9 +180,13 @@ python predict.py predict --home Spain --away England --neutral   # works immedi
 
 `model.json` is committed, so prediction/simulation work right after clone;
 `data/` (match results) auto-downloads on first use. For live odds set
-`ODDS_API_KEY`. From a **phone**: browse/edit the repo on github.com, or open it
-in a cloud dev environment (e.g. GitHub Codespaces) to actually run the tools —
-the local scripts need a real Python environment, which a browser chat lacks.
+`ODDS_API_KEY`.
+
+From a **phone or any browser**: open the repo in **GitHub Codespaces** (Code ▸
+Codespaces ▸ Create). The included `.devcontainer/` auto-installs dependencies,
+so once it boots you can run e.g. `python simulate.py` straight from the browser
+terminal. Set `ODDS_API_KEY` / `API_FOOTBALL_KEY` as Codespaces secrets to use
+the live-odds and injury features there.
 
 ## Notes & extensions
 
