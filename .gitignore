@@ -16,6 +16,9 @@ odds_data/
 *.key
 secrets*
 
+# Personal bet-pick log (picks.py) — local record, not source
+picks_log.csv
+
 # Machine-local Claude permission overrides
 .claude/settings.local.json
 
