@@ -59,7 +59,7 @@ L-BFGS-B with an analytic gradient and a ridge penalty, then `ρ` by a 1-D
 search — fast (~4s on 12k matches) and faithful to the original method.
 
 **Blend + markets (`markets.py`, `model.py`)** — Dixon-Coles and Elo expected
-goals are blended (`--dc-weight`, default 0.7) into a single `λ`/`μ`, which
+goals are blended (`--dc-weight`, default 0.8) into a single `λ`/`μ`, which
 generates a full scoreline matrix. From that one matrix we derive **1X2**,
 **double chance**, **over/under** (any line), **BTTS**, and **correct score**.
 
@@ -75,8 +75,10 @@ pip install -r requirements.txt
 python train.py            # downloads data, fits, writes model.json
 ```
 
-Useful flags: `--since 2014-01-01` (history window), `--half-life 540` (recency
-in days), `--dc-weight 0.7` (Dixon-Coles vs Elo), `--refresh` (re-download).
+Useful flags: `--since 2014-01-01` (history window), `--half-life 1460` (recency
+in days), `--dc-weight 0.8` (Dixon-Coles vs Elo), `--refresh` (re-download).
+The half-life and blend defaults were tuned on a walk-forward backtest with a
+held-out validation slice (`python tune.py`).
 
 ## Usage
 
@@ -130,6 +132,7 @@ simulate.py       CLI: tournament odds (qualify / reach round / win cup)
 fetch_odds.py     CLI: live odds, line-shopping, market-anchored value scan
 analyze_today.py  value scan of a day's board (1X2 + Asian O/U)
 backtest.py       walk-forward skill/calibration (log-loss, Brier, RPS)
+tune.py           grid-search half-life / blend weight (tune vs held-out split)
 roi_backtest.py   ROI vs real bookmaker odds (--book pinnacle-close|...)
 market_blend.py   forecast combination: model vs market signal
 ```
