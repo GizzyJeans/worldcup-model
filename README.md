@@ -126,10 +126,12 @@ worldcup_model/
   tournament.py   Monte-Carlo of the 2026 World Cup from the current state
   odds_feed.py    live multi-book odds (The Odds API): parse, consensus, best price
   squad.py        injury/suspension impact on expected goals (+ API-Football fetch)
+  clv.py          line-shopping pick selection + closing-line-value scoring
 train.py          fit and save model.json
 predict.py        CLI: predict / value / fixtures / ratings
 simulate.py       CLI: tournament odds (qualify / reach round / win cup)
 fetch_odds.py     CLI: live odds, line-shopping, market-anchored value scan
+picks.py          CLI: scan line-shopping value, settle, report CLV (skill metric)
 analyze_today.py  value scan of a day's board (1X2 + Asian O/U)
 backtest.py       walk-forward skill/calibration (log-loss, Brier, RPS)
 tune.py           grid-search half-life / blend weight (tune vs held-out split)
@@ -153,6 +155,35 @@ available price** per outcome across books. `--value` anchors the model to the
 sharp market and flags any book whose price beats that consensus — the only
 edge path the backtests support (line-shopping soft prices, not beating the
 close). Discrepancies are small and short-lived; treat stakes as small.
+
+## Bet picking & closing-line value (CLV)
+
+`picks.py` is the bet-picking engine, built around the one honest truth the
+backtests leave standing: a results model **cannot beat the sharp close**
+(`roi_backtest.py`: ~−8% yield into Pinnacle, no edge), so it doesn't try. It
+**line-shops** — bets a soft book only when its best price beats the de-vigged
+sharp consensus — and scores every pick with **closing-line value**, the metric
+that actually measures bet-picking skill (and is far less noisy than ROI).
+
+```bash
+python picks.py scan   --sport soccer_fifa_world_cup   # log today's value picks
+python picks.py settle --sport soccer_fifa_world_cup   # record the close + CLV
+python picks.py report                                 # avg CLV, beat-close rate
+```
+
+`scan` flags the outcome whose best price clears the consensus by `--min-edge`
+(probability edge, so longshots aren't flagged on noise), sizes it with
+fractional Kelly, and appends it to `picks_log.csv`. After the lines close,
+`settle` fills each pick's closing consensus and CLV; `report` aggregates them —
+**positive average CLV is the skill signal.** For offline use / testing, pass
+`--odds-file board.json` (a list of events in the live feed's shape) instead of
+`--sport`.
+
+> Why forward-only: line-shopping needs several books per match, but the
+> historical odds dataset has just **one book per international** — so the edge
+> can't be backtested here, only measured going forward via the CLV log. And it
+> remains line-shopping (exploiting soft-book price dispersion), **not** the
+> model beating the market. Bet small; this is analysis, not a guaranteed edge.
 
 ## Injuries & suspensions
 
