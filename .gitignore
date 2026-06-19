@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Auto-downloaded match results (data.py fetches on demand)
+data/
+
+# Large odds dataset (run: python fetch_odds_data.py)
+odds_data/
+
+# Secrets — never commit API keys
+.env
+*.key
+secrets*
+
+# Machine-local Claude permission overrides
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
