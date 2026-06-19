@@ -19,7 +19,7 @@ def _ou_line(market: str) -> float:
 
 
 class ExpertModel:
-    def __init__(self, dc_weight: float = 0.7, half_life_days: float = 540.0,
+    def __init__(self, dc_weight: float = 0.8, half_life_days: float = 1460.0,
                  host_adv: float = 0.39):
         # dc_weight blends Dixon-Coles vs Elo at the expected-goals level.
         # host_adv: extra goal-supremacy for a World Cup host (see host.py).

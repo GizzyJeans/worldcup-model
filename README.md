@@ -59,7 +59,7 @@ L-BFGS-B with an analytic gradient and a ridge penalty, then `ρ` by a 1-D
 search — fast (~4s on 12k matches) and faithful to the original method.
 
 **Blend + markets (`markets.py`, `model.py`)** — Dixon-Coles and Elo expected
-goals are blended (`--dc-weight`, default 0.7) into a single `λ`/`μ`, which
+goals are blended (`--dc-weight`, default 0.8) into a single `λ`/`μ`, which
 generates a full scoreline matrix. From that one matrix we derive **1X2**,
 **double chance**, **over/under** (any line), **BTTS**, and **correct score**.
 
@@ -75,8 +75,10 @@ pip install -r requirements.txt
 python train.py            # downloads data, fits, writes model.json
 ```
 
-Useful flags: `--since 2014-01-01` (history window), `--half-life 540` (recency
-in days), `--dc-weight 0.7` (Dixon-Coles vs Elo), `--refresh` (re-download).
+Useful flags: `--since 2014-01-01` (history window), `--half-life 1460` (recency
+in days), `--dc-weight 0.8` (Dixon-Coles vs Elo), `--refresh` (re-download).
+The half-life and blend defaults were tuned on a walk-forward backtest with a
+held-out validation slice (`python tune.py`).
 
 ## Usage
 
@@ -130,6 +132,7 @@ simulate.py       CLI: tournament odds (qualify / reach round / win cup)
 fetch_odds.py     CLI: live odds, line-shopping, market-anchored value scan
 analyze_today.py  value scan of a day's board (1X2 + Asian O/U)
 backtest.py       walk-forward skill/calibration (log-loss, Brier, RPS)
+tune.py           grid-search half-life / blend weight (tune vs held-out split)
 roi_backtest.py   ROI vs real bookmaker odds (--book pinnacle-close|...)
 market_blend.py   forecast combination: model vs market signal
 ```
@@ -171,11 +174,25 @@ from data (our dataset has no player info) — verify rosters and tune before us
 ```bash
 python simulate.py --sims 20000          # each team's qualify/QF/SF/final/cup odds
 python simulate.py --group A             # one group's table
+python simulate.py --injuries            # apply live injuries (needs API_FOOTBALL_KEY)
+python simulate.py --injuries-file out.json   # apply injuries from a JSON file
 ```
 
-Reconstructs the 12 groups from the fixtures, seeds tables with results already
-played, then Monte-Carlos the remaining group games (model Poisson, FIFA
-tiebreakers) and the knockout (neutral random draw of the 32 qualifiers).
+Reconstructs the 12 groups from the fixtures (labelled with their real FIFA
+letters A–L from the official draw), seeds tables with results already played,
+then Monte-Carlos the remaining group games (model Poisson, FIFA tiebreakers)
+and the knockout through the **official 2026 bracket**: group winners and
+runners-up take their fixed Round-of-32 slots, the 8 best third-placed teams are
+allocated to winners via FIFA's eligibility table, and the R16→QF→SF→final tree
+is the published one — so group winners get real seeding protection and a team's
+path matches the actual tournament.
+
+With `--injuries` (or `--injuries-file '{"Team": ["Player", ...]}'`) each team's
+absences shift its expected goals for *every* remaining game — group and
+knockout — so a talisman injury ripples through the whole simulation. Known
+stars use their `squad.py` tier; unrecognised auto-fetched players default to
+~negligible impact (we can't gauge their importance). A summary lists the
+applied teams, their goal impact, and any names that couldn't be matched.
 
 ## Validation summary
 
@@ -210,6 +227,5 @@ the live-odds and injury features there.
 ## Notes & extensions
 
 - Team names match the dataset exactly (e.g. `South Korea`, `United States`).
-- Possible extensions: the exact official knockout bracket (vs the neutral
-  random draw used now), bivariate-Poisson goal correlation, and squad/lineup-
-  based ratings.
+- Possible extensions: bivariate-Poisson goal correlation and squad/lineup-
+  based ratings. (The official knockout bracket is now implemented.)

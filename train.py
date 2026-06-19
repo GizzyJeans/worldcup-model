@@ -1,6 +1,6 @@
 """Fit the expert model on historical international results and save it.
 
-    python train.py [--since 2014-01-01] [--half-life 540] [--dc-weight 0.7]
+    python train.py [--since 2014-01-01] [--half-life 1460] [--dc-weight 0.8]
 
 The recency window (`--since`) keeps the fit on the modern game; the half-life
 controls how fast older matches fade; `--dc-weight` blends Dixon-Coles vs Elo.
@@ -26,8 +26,8 @@ except (AttributeError, OSError):
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--since", default="2014-01-01", help="earliest match date to fit on")
-    ap.add_argument("--half-life", type=float, default=540.0, help="recency half-life in days")
-    ap.add_argument("--dc-weight", type=float, default=0.7, help="Dixon-Coles vs Elo blend [0-1]")
+    ap.add_argument("--half-life", type=float, default=1460.0, help="recency half-life in days")
+    ap.add_argument("--dc-weight", type=float, default=0.8, help="Dixon-Coles vs Elo blend [0-1]")
     ap.add_argument("--refresh", action="store_true", help="re-download the dataset first")
     ap.add_argument("--out", default=MODEL_PATH)
     args = ap.parse_args()

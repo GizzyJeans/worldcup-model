@@ -88,8 +88,8 @@ def main() -> None:
     ap.add_argument("--since", default="2014-01-01")
     ap.add_argument("--test-start", default="2018-01-01")
     ap.add_argument("--refit-days", type=int, default=180)
-    ap.add_argument("--half-life", type=float, default=540.0)
-    ap.add_argument("--dc-weight", type=float, default=0.7)
+    ap.add_argument("--half-life", type=float, default=1460.0)
+    ap.add_argument("--dc-weight", type=float, default=0.8)
     ap.add_argument("--out", default=None, help="optional CSV of per-match predictions")
     args = ap.parse_args()
 
