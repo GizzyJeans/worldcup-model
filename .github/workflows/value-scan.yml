@@ -1,0 +1,52 @@
+name: Daily value scan
+
+on:
+  schedule:
+    - cron: "30 6 * * *"   # 06:30 UTC daily (after retrain)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: push-main
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Run line-shopping value scan into a report
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          mkdir -p reports
+          {
+            echo "# World Cup value scan — $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo
+            echo "Line-shop discrepancies vs the sharp consensus (model anchored to market)."
+            echo "These are small, perishable, and not a proven edge — verify before betting."
+            echo
+            echo '```'
+            python fetch_odds.py --sport soccer_fifa_world_cup --value 2>&1 \
+              || echo "(scan unavailable: missing ODDS_API_KEY secret, quota, or off-season)"
+            echo '```'
+          } > reports/latest-value.md
+          cat reports/latest-value.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit report if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/latest-value.md
+          if git diff --staged --quiet; then
+            echo "report unchanged."
+          else
+            git commit -m "chore: daily value scan [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
