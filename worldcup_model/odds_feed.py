@@ -91,6 +91,21 @@ def _parse_event(e: dict) -> Event:
                         tot.setdefault(float(line), {})[o["name"].lower()] = o["price"]
                 if tot:
                     mk["totals"] = tot
+            elif m["key"] == "spreads":
+                # Key every line by the HOME-perspective handicap; keep only the
+                # lines a book quotes both sides of (so two-way de-vig is valid).
+                sp: dict = {}
+                for o in m["outcomes"]:
+                    pt = o.get("point")
+                    if pt is None:
+                        continue
+                    if o["name"] == home:
+                        sp.setdefault(float(pt), {})["home"] = o["price"]
+                    elif o["name"] == away:
+                        sp.setdefault(-float(pt), {})["away"] = o["price"]
+                sp = {k: v for k, v in sp.items() if "home" in v and "away" in v}
+                if sp:
+                    mk["spreads"] = sp
         if mk:
             books[b.get("title", b.get("key", "?"))] = mk
     return Event(e["id"], home, away, e.get("commence_time", ""), books)
@@ -134,4 +149,45 @@ def best_1x2(ev: Event) -> dict[str, tuple[float, str]]:
         for sel, price in b.get("1x2", {}).items():
             if sel not in out or price > out[sel][0]:
                 out[sel] = (price, title)
+    return out
+
+
+def _devig_two_way(home_price: float, away_price: float) -> tuple[float, float]:
+    """De-vig a two-way (home/away) handicap market -> (P(home cover), P(away cover))."""
+    ih, ia = 1.0 / home_price, 1.0 / away_price
+    s = ih + ia
+    return ih / s, ia / s
+
+
+def consensus_spreads(ev: Event, sharp_only: bool = False
+                      ) -> dict[tuple[str, float], float] | None:
+    """De-vigged consensus cover probability per (side, line).
+
+    `line` is that side's OWN handicap (home -1.5 -> ("home", -1.5); the matching
+    away side is ("away", +1.5)). Probabilities are averaged across the books
+    quoting that exact line (optionally sharp books only)."""
+    agg: dict[tuple[str, float], list[float]] = {}
+    for title, b in ev.books.items():
+        if "spreads" not in b:
+            continue
+        if sharp_only and not any(s in title.lower() for s in SHARP_BOOKS):
+            continue
+        for line, od in b["spreads"].items():
+            ph, pa = _devig_two_way(od["home"], od["away"])
+            agg.setdefault(("home", line), []).append(ph)
+            agg.setdefault(("away", -line), []).append(pa)
+    if not agg:
+        return None
+    return {k: sum(v) / len(v) for k, v in agg.items()}
+
+
+def best_spreads(ev: Event) -> dict[tuple[str, float], tuple[float, str]]:
+    """Best (highest) price per (side, own-line) and which book offers it."""
+    out: dict[tuple[str, float], tuple[float, str]] = {}
+    for title, b in ev.books.items():
+        for line, od in b.get("spreads", {}).items():
+            for side, own in (("home", line), ("away", -line)):
+                key = (side, own)
+                if key not in out or od[side] > out[key][0]:
+                    out[key] = (od[side], title)
     return out
