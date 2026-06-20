@@ -124,7 +124,7 @@ worldcup_model/
   value.py        de-vig, edge, EV, Kelly staking, market-anchored blend
   model.py        ExpertModel: blend, predict, find_value, save/load
   tournament.py   Monte-Carlo of the 2026 World Cup from the current state
-  odds_feed.py    live multi-book odds (The Odds API): parse, consensus, best price
+  odds_feed.py    live multi-book odds (The Odds API): 1X2 + handicap consensus, best price
   squad.py        injury/suspension impact on expected goals (+ API-Football fetch)
   clv.py          line-shopping pick selection + closing-line-value scoring
 train.py          fit and save model.json
@@ -134,6 +134,7 @@ fetch_odds.py     CLI: live odds, line-shopping, market-anchored value scan
 picks.py          CLI: scan line-shopping value, settle, report CLV (skill metric)
 analyze_today.py  value scan of a day's board (1X2 + Asian O/U)
 backtest.py       walk-forward skill/calibration (log-loss, Brier, RPS)
+wc_backtest.py    walk-forward 1X2 / O/U / handicap hit-rate on played fixtures
 tune.py           grid-search half-life / blend weight (tune vs held-out split)
 roi_backtest.py   ROI vs real bookmaker odds (--book pinnacle-close|...)
 market_blend.py   forecast combination: model vs market signal

@@ -18,7 +18,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .odds_feed import Event, best_1x2, consensus_1x2
+from .odds_feed import (Event, best_1x2, best_spreads, consensus_1x2,
+                        consensus_spreads)
 from .value import kelly_fraction
 
 OUTCOMES = ("home", "draw", "away")
@@ -36,6 +37,7 @@ class Pick:
     edge: float             # consensus_prob - 1/price (probability edge)
     ev: float               # consensus_prob * price - 1 (EV per unit staked)
     stake: float            # fractional-Kelly stake
+    line: float = 0.0       # handicap line for the selection ("ah" market only)
 
 
 def sharp_consensus(ev: Event) -> dict[str, float] | None:
@@ -43,6 +45,14 @@ def sharp_consensus(ev: Event) -> dict[str, float] | None:
     cons = consensus_1x2(ev, sharp_only=True)
     if cons is None:
         cons = consensus_1x2(ev, sharp_only=False)
+    return cons
+
+
+def sharp_consensus_ah(ev: Event) -> dict[tuple[str, float], float] | None:
+    """Sharp-book handicap consensus per (side, line), falling back to all books."""
+    cons = consensus_spreads(ev, sharp_only=True)
+    if cons is None:
+        cons = consensus_spreads(ev, sharp_only=False)
     return cons
 
 
@@ -75,6 +85,38 @@ def make_picks(ev: Event, bankroll: float = 1000.0, kelly: float = 0.25,
             market="1x2", selection=sel, book=book, price=round(price, 3),
             consensus_prob=round(p, 4), edge=round(edge, 4),
             ev=round(p * price - 1.0, 4), stake=round(frac * bankroll, 2)))
+    if top_only and picks:
+        picks = [max(picks, key=lambda q: q.edge)]
+    return picks
+
+
+def make_ah_picks(ev: Event, bankroll: float = 1000.0, kelly: float = 0.25,
+                  min_edge: float = 0.02, max_stake_frac: float = 0.05,
+                  top_only: bool = True) -> list[Pick]:
+    """Line-shopping picks on the Asian-handicap board: best available price for a
+    (side, line) beats the de-vigged sharp consensus for that same line.
+
+    Mirrors `make_picks` but over the two-way spreads market. Each pick records
+    its `line` so the closing handicap consensus can be matched at settle time."""
+    cons = sharp_consensus_ah(ev)
+    if not cons:
+        return []
+    best = best_spreads(ev)
+    picks: list[Pick] = []
+    for (side, line), (price, book) in best.items():
+        p = cons.get((side, line))
+        if p is None:
+            continue
+        edge = p - 1.0 / price
+        if edge < min_edge:
+            continue
+        frac = min(kelly_fraction(p, price) * kelly, max_stake_frac)
+        picks.append(Pick(
+            event=f"{ev.home} v {ev.away}", commence_time=ev.commence_time,
+            market="ah", selection=side, book=book, price=round(price, 3),
+            consensus_prob=round(p, 4), edge=round(edge, 4),
+            ev=round(p * price - 1.0, 4), stake=round(frac * bankroll, 2),
+            line=line))
     if top_only and picks:
         picks = [max(picks, key=lambda q: q.edge)]
     return picks
