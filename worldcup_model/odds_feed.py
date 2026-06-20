@@ -191,3 +191,35 @@ def best_spreads(ev: Event) -> dict[tuple[str, float], tuple[float, str]]:
                 if key not in out or od[side] > out[key][0]:
                     out[key] = (od[side], title)
     return out
+
+
+def consensus_totals(ev: Event, sharp_only: bool = False
+                     ) -> dict[tuple[float, str], float] | None:
+    """De-vigged over/under consensus per (line, side), averaged across the books
+    quoting that line (optionally sharp books only)."""
+    agg: dict[tuple[float, str], list[float]] = {}
+    for title, b in ev.books.items():
+        if "totals" not in b:
+            continue
+        if sharp_only and not any(s in title.lower() for s in SHARP_BOOKS):
+            continue
+        for line, od in b["totals"].items():
+            if "over" in od and "under" in od:
+                po, pu = _devig_two_way(od["over"], od["under"])
+                agg.setdefault((line, "over"), []).append(po)
+                agg.setdefault((line, "under"), []).append(pu)
+    if not agg:
+        return None
+    return {k: sum(v) / len(v) for k, v in agg.items()}
+
+
+def best_totals(ev: Event) -> dict[tuple[float, str], tuple[float, str]]:
+    """Best (highest) price per (line, side) and which book offers it."""
+    out: dict[tuple[float, str], tuple[float, str]] = {}
+    for title, b in ev.books.items():
+        for line, od in b.get("totals", {}).items():
+            for side, price in od.items():
+                key = (line, side)
+                if key not in out or price > out[key][0]:
+                    out[key] = (price, title)
+    return out

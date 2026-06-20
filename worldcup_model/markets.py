@@ -67,3 +67,26 @@ def markets(lam: float, mu: float, rho: float, ou_lines=(2.5,), max_goals: int =
     flat.sort(key=lambda kv: kv[1], reverse=True)
     out["correct_score"] = {f"{r}-{c}": p for (r, c), p in flat[:6]}
     return out
+
+
+def asian_handicap(lam: float, mu: float, rho: float, home_line: float,
+                   max_goals: int = 10) -> dict[str, float]:
+    """Push-excluded cover probabilities for a home-perspective handicap line.
+
+    Returns {"home": P(home covers `home_line`), "away": P(away covers the
+    mirror `-home_line`)}, normalised over the non-push outcomes (a refunded
+    push leaves an even-money bet, so it drops out of the cover probability).
+    Quarter lines (e.g. -1.25) settle as two half-bets and are averaged."""
+    if round(home_line * 4) % 2 == 1:  # quarter line -> mean of adjacent lines
+        lo = asian_handicap(lam, mu, rho, home_line - 0.25, max_goals)
+        hi = asian_handicap(lam, mu, rho, home_line + 0.25, max_goals)
+        return {k: (lo[k] + hi[k]) / 2 for k in lo}
+    mat = score_matrix(lam, mu, rho, max_goals)
+    n = mat.shape[0]
+    margin = np.subtract.outer(np.arange(n), np.arange(n)) + home_line
+    win = float(mat[margin > 1e-9].sum())
+    loss = float(mat[margin < -1e-9].sum())
+    s = win + loss
+    if s <= 0:
+        return {"home": 0.5, "away": 0.5}
+    return {"home": win / s, "away": loss / s}
