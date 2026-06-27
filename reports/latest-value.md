@@ -1,88 +1,85 @@
-# World Cup value scan — 2026-06-26 09:57 UTC
+# World Cup value scan — 2026-06-27 09:10 UTC
 
 Line-shop discrepancies vs the sharp consensus (model anchored to market).
 These are small, perishable, and not a proven edge — verify before betting.
 
 ```
-16 upcoming events with odds  |  quota left: 89  (used 411)
+15 upcoming events with odds  |  quota left: 83  (used 417)
 
-Norway v France   (41 books)
-  consensus:  H 20%  D 21%  A 59%
-  best price: HOME 5.20 [Smarkets]  DRAW 4.90 [Smarkets]  AWAY 1.67 [Smarkets]
-Senegal v Iraq   (41 books)
-  consensus:  H 78%  D 14%  A 8%
-  best price: HOME 1.26 [Smarkets]  DRAW 7.40 [Smarkets]  AWAY 15.00 [Betsson]
-Cape Verde v Saudi Arabia   (41 books)
-  consensus:  H 36%  D 29%  A 35%
-  best price: HOME 2.80 [Unibet (NL]  DRAW 3.55 [Smarkets]  AWAY 2.90 [Smarkets]
-Uruguay v Spain   (41 books)
-  consensus:  H 15%  D 25%  A 59%
-  best price: HOME 7.80 [Smarkets]  DRAW 4.50 [Smarkets]  AWAY 1.67 [1xBet]
-New Zealand v Belgium   (41 books)
-  consensus:  H 6%  D 13%  A 81%
-  best price: HOME 19.49 [Smarkets]  DRAW 8.60 [Smarkets]  AWAY 1.21 [Smarkets]
-Egypt v Iran   (41 books)
-  consensus:  H 39%  D 36%  A 25%
-  best price: HOME 2.60 [Betfred (U]  DRAW 2.75 [Nordic Bet]  AWAY 4.13 [1xBet]
 Croatia v Ghana   (41 books)
-  consensus:  H 54%  D 29%  A 17%
-  best price: HOME 1.83 [Smarkets]  DRAW 3.40 [Unibet (UK]  AWAY 6.20 [Smarkets]
+  consensus:  H 50%  D 30%  A 19%
+  best price: HOME 1.99 [1xBet]  DRAW 3.25 [Betfred (U]  AWAY 5.30 [Smarkets]
 Panama v England   (41 books)
-  consensus:  H 6%  D 12%  A 82%
-  best price: HOME 22.00 [Betsson]  DRAW 9.20 [Smarkets]  AWAY 1.20 [1xBet]
+  consensus:  H 6%  D 11%  A 83%
+  best price: HOME 20.00 [Unibet (NL]  DRAW 10.00 [Unibet (NL]  AWAY 1.19 [GTbets]
 Colombia v Portugal   (41 books)
-  consensus:  H 23%  D 26%  A 51%
-  best price: HOME 4.40 [Smarkets]  DRAW 3.95 [Smarkets]  AWAY 1.93 [Unibet (SE]
-DR Congo v Uzbekistan   (38 books)
-  consensus:  H 54%  D 24%  A 22%
-  best price: HOME 1.83 [Smarkets]  DRAW 4.30 [Winamax (D]  AWAY 4.70 [Smarkets]
-Algeria v Austria   (40 books)
-  consensus:  H 24%  D 43%  A 33%
-  best price: HOME 4.30 [Smarkets]  DRAW 2.38 [Smarkets]  AWAY 3.00 [Betfred (U]
-Jordan v Argentina   (40 books)
-  consensus:  H 6%  D 13%  A 81%
-  best price: HOME 19.50 [Betsson]  DRAW 9.20 [Smarkets]  AWAY 1.21 [GTbets]
-South Africa v Canada   (38 books)
-  consensus:  H 18%  D 26%  A 56%
-  best price: HOME 6.00 [Smarkets]  DRAW 3.75 [Unibet (FR]  AWAY 1.77 [1xBet]
-Brazil v Japan   (38 books)
-  consensus:  H 55%  D 26%  A 19%
-  best price: HOME 1.80 [Betfair]  DRAW 3.85 [Winamax (D]  AWAY 5.33 [1xBet]
-Netherlands v Morocco   (37 books)
-  consensus:  H 45%  D 29%  A 26%
-  best price: HOME 2.22 [Smarkets]  DRAW 3.40 [Coral]  AWAY 3.90 [Matchbook]
-USA v Bosnia & Herzegovina   (37 books)
-  consensus:  H 64%  D 22%  A 14%
-  best price: HOME 1.57 [GTbets]  DRAW 4.60 [Betfair]  AWAY 8.00 [Betfair]
+  consensus:  H 27%  D 25%  A 48%
+  best price: HOME 3.65 [Smarkets]  DRAW 4.00 [Unibet (SE]  AWAY 2.08 [Betfair]
+DR Congo v Uzbekistan   (39 books)
+  consensus:  H 59%  D 23%  A 17%
+  best price: HOME 1.65 [Coolbet]  DRAW 4.40 [Winamax (D]  AWAY 6.00 [Bet Victor]
+Algeria v Austria   (41 books)
+  consensus:  H 23%  D 44%  A 33%
+  best price: HOME 4.50 [Smarkets]  DRAW 2.23 [1xBet]  AWAY 3.10 [Betfair]
+Jordan v Argentina   (41 books)
+  consensus:  H 6%  D 11%  A 83%
+  best price: HOME 22.00 [1xBet]  DRAW 9.95 [1xBet]  AWAY 1.21 [GTbets]
+South Africa v Canada   (41 books)
+  consensus:  H 18%  D 27%  A 56%
+  best price: HOME 5.90 [Smarkets]  DRAW 3.75 [Unibet (FR]  AWAY 1.77 [1xBet]
+Brazil v Japan   (41 books)
+  consensus:  H 56%  D 25%  A 18%
+  best price: HOME 1.75 [1xBet]  DRAW 4.00 [Smarkets]  AWAY 5.60 [Smarkets]
+Germany v Paraguay   (40 books)
+  consensus:  H 69%  D 20%  A 12%
+  best price: HOME 1.43 [BetOnline.]  DRAW 5.20 [Tipico]  AWAY 9.40 [Smarkets]
+Netherlands v Morocco   (39 books)
+  consensus:  H 44%  D 30%  A 26%
+  best price: HOME 2.24 [Smarkets]  DRAW 3.41 [1xBet]  AWAY 3.95 [Smarkets]
+Ivory Coast v Norway   (39 books)
+  consensus:  H 25%  D 27%  A 48%
+  best price: HOME 4.10 [Unibet (SE]  DRAW 3.78 [1xBet]  AWAY 2.08 [Smarkets]
+France v Sweden   (39 books)
+  consensus:  H 74%  D 17%  A 9%
+  best price: HOME 1.33 [Betsson]  DRAW 6.20 [Tipico]  AWAY 12.50 [Matchbook]
+USA v Bosnia & Herzegovina   (40 books)
+  consensus:  H 69%  D 20%  A 11%
+  best price: HOME 1.42 [GTbets]  DRAW 5.20 [Betfair]  AWAY 10.00 [Betfair]
+Australia v Egypt   (37 books)
+  consensus:  H 29%  D 32%  A 39%
+  best price: HOME 3.50 [Matchbook]  DRAW 3.06 [1xBet]  AWAY 2.60 [Smarkets]
+Argentina v Cape Verde   (38 books)
+  consensus:  H 82%  D 13%  A 5%
+  best price: HOME 1.19 [Betsson]  DRAW 8.50 [Tipico]  AWAY 26.00 [Matchbook]
 
 Value scan (model anchored to sharp market, line-shopped):
-  Uruguay v Spain  HOME        @ 7.80 (Smarkets)  fair 14.9%  EV +16.0%  stake 59
-  Uruguay v Spain  DRAW        @ 4.50 (Smarkets)  fair 25.6%  EV +15.3%  stake 109
-  Senegal v Iraq  DRAW        @ 7.40 (Smarkets)  fair 15.3%  EV +13.0%  stake 51
-  Panama v England  DRAW        @ 9.20 (Smarkets)  fair 12.1%  EV +11.4%  stake 35
-  New Zealand v Belgium  DRAW        @ 8.60 (Smarkets)  fair 12.9%  EV +10.7%  stake 35
-  Egypt v Iran  AWAY        @ 4.13 (1xBet)  fair 26.2%  EV +8.1%  stake 64
-  DR Congo v Uzbekistan  AWAY        @ 4.70 (Smarkets)  fair 22.9%  EV +7.6%  stake 51
-  Senegal v Iraq  UNDER 3     @ 2.09 (BetOnline.ag)  fair 51.0%  EV +6.6%  stake 152
-  Senegal v Iraq  AH A +1.75  @ 2.12 (Matchbook)  fair 50.2%  EV +6.5%  stake 145
-  Colombia v Portugal  HOME        @ 4.40 (Smarkets)  fair 24.0%  EV +5.8%  stake 43
-  Norway v France  HOME        @ 5.20 (Smarkets)  fair 20.3%  EV +5.8%  stake 34
-  DR Congo v Uzbekistan  DRAW        @ 4.30 (Winamax (DE))  fair 24.6%  EV +5.8%  stake 44
-  Cape Verde v Saudi Arabia  DRAW        @ 3.55 (Smarkets)  fair 29.7%  EV +5.3%  stake 52
-  Norway v France  DRAW        @ 4.90 (Smarkets)  fair 21.4%  EV +5.0%  stake 32
-  South Africa v Canada  HOME        @ 6.00 (Smarkets)  fair 17.5%  EV +4.9%  stake 25
-  Jordan v Argentina  DRAW        @ 9.20 (Smarkets)  fair 11.4%  EV +4.7%  stake 14
-  Algeria v Austria  HOME        @ 4.30 (Smarkets)  fair 24.3%  EV +4.5%  stake 34
-  DR Congo v Uzbekistan  AH A +0.75  @ 1.91 (Matchbook)  fair 54.5%  EV +4.1%  stake 112
-  Netherlands v Morocco  AWAY        @ 3.90 (Matchbook)  fair 26.6%  EV +3.6%  stake 31
-  DR Congo v Uzbekistan  UNDER 2.5   @ 1.97 (BetOnline.ag)  fair 52.5%  EV +3.4%  stake 87
-  Colombia v Portugal  DRAW        @ 3.95 (Smarkets)  fair 26.1%  EV +3.0%  stake 25
-  South Africa v Canada  AH H +0.75  @ 2.00 (Matchbook)  fair 51.4%  EV +2.8%  stake 69
-  Colombia v Portugal  AH H +0.5   @ 2.06 (Matchbook)  fair 49.8%  EV +2.6%  stake 61
-  Egypt v Iran  AH A +0.25  @ 1.91 (Matchbook)  fair 53.5%  EV +2.2%  stake 59
-  Panama v England  AH H +2.25  @ 1.89 (Matchbook)  fair 54.0%  EV +2.1%  stake 60
+  Panama v England  DRAW        @ 10.00 (Unibet (NL))  fair 11.8%  EV +18.0%  stake 50
+  Jordan v Argentina  DRAW        @ 9.95 (1xBet)  fair 11.4%  EV +13.5%  stake 38
+  Germany v Paraguay  AWAY        @ 9.40 (Smarkets)  fair 11.9%  EV +12.2%  stake 36
+  France v Sweden  AWAY        @ 12.50 (Matchbook)  fair 8.8%  EV +10.5%  stake 23
+  DR Congo v Uzbekistan  AWAY        @ 6.00 (Bet Victor)  fair 18.4%  EV +10.3%  stake 51
+  Germany v Paraguay  DRAW        @ 5.20 (Tipico)  fair 20.8%  EV +8.3%  stake 49
+  DR Congo v Uzbekistan  DRAW        @ 4.40 (Winamax (DE))  fair 24.6%  EV +8.2%  stake 61
+  Algeria v Austria  AWAY        @ 3.10 (Betfair)  fair 34.3%  EV +6.4%  stake 76
+  DR Congo v Uzbekistan  AH A +0.75  @ 2.16 (Matchbook)  fair 48.8%  EV +5.4%  stake 116
+  Algeria v Austria  HOME        @ 4.50 (Smarkets)  fair 23.3%  EV +4.9%  stake 35
+  Australia v Egypt  HOME        @ 3.50 (Matchbook)  fair 29.8%  EV +4.4%  stake 44
+  Netherlands v Morocco  DRAW        @ 3.41 (1xBet)  fair 30.5%  EV +4.0%  stake 42
+  South Africa v Canada  HOME        @ 5.90 (Smarkets)  fair 17.6%  EV +3.6%  stake 18
+  Ivory Coast v Norway  DRAW        @ 3.78 (1xBet)  fair 27.4%  EV +3.4%  stake 31
+  Brazil v Japan  AWAY        @ 5.60 (Smarkets)  fair 18.4%  EV +3.2%  stake 17
+  South Africa v Canada  DRAW        @ 3.75 (Unibet (FR))  fair 27.5%  EV +2.9%  stake 27
+  Netherlands v Morocco  AWAY        @ 3.95 (Smarkets)  fair 26.1%  EV +2.9%  stake 25
+  Colombia v Portugal  DRAW        @ 4.00 (Unibet (SE))  fair 25.7%  EV +2.7%  stake 23
+  Ivory Coast v Norway  HOME        @ 4.10 (Unibet (SE))  fair 25.0%  EV +2.6%  stake 21
+  Germany v Paraguay  AH A +1.25  @ 2.04 (Matchbook)  fair 50.3%  EV +2.6%  stake 62
+  DR Congo v Uzbekistan  UNDER 2.25  @ 2.01 (Pinnacle)  fair 51.0%  EV +2.5%  stake 61
+  Ivory Coast v Norway  UNDER 2.5   @ 1.97 (Matchbook)  fair 52.0%  EV +2.4%  stake 63
+  Argentina v Cape Verde  DRAW        @ 8.50 (Tipico)  fair 12.0%  EV +2.3%  stake 8
+  Argentina v Cape Verde  UNDER 3     @ 1.85 (BetOnline.ag)  fair 55.2%  EV +2.2%  stake 65
+  France v Sweden  DRAW        @ 6.20 (Tipico)  fair 16.5%  EV +2.0%  stake 10
 
   25 prices beat the sharp line (model blended to market at w=0.9). Line-shop discrepancies, not model edges — small, perishable, verify before betting.
 
-quota remaining: 89
+quota remaining: 83
 ```
