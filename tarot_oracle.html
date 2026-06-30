@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔮 塔羅球神諭・大師占卜</title>
+<style>
+  :root{
+    --gold:#d9b25a; --gold2:#f3d98b; --ink:#0d0b1f; --ink2:#171331;
+    --paper:#1d1840; --line:#3a2f63; --txt:#ece7ff; --dim:#a99fd6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; font-family:"Noto Serif CJK TC","Songti TC","STSong",serif;
+    color:var(--txt); background:
+      radial-gradient(1200px 600px at 50% -10%, #2a2055 0%, transparent 60%),
+      radial-gradient(800px 500px at 10% 110%, #241a4a 0%, transparent 55%),
+      var(--ink);
+    overflow-x:hidden;
+  }
+  body::before{ /* starfield */
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.5;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 20%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 40% 70%, #ffe9b0, transparent),
+      radial-gradient(1px 1px at 85% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 45%, #cbbcff, transparent),
+      radial-gradient(1.5px 1.5px at 12% 80%, #fff, transparent),
+      radial-gradient(1px 1px at 90% 35%, #ffe9b0, transparent);
+    animation:tw 6s ease-in-out infinite alternate;
+  }
+  @keyframes tw{from{opacity:.35}to{opacity:.65}}
+  .wrap{position:relative; max-width:1000px; margin:0 auto; padding:28px 16px 60px}
+  header{text-align:center; margin-bottom:8px}
+  h1{font-size:30px; margin:0; letter-spacing:4px;
+     background:linear-gradient(180deg,var(--gold2),var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent;
+     text-shadow:0 0 24px rgba(217,178,90,.25)}
+  .sub{color:var(--dim); font-size:14px; margin-top:6px; letter-spacing:2px}
+  .panel{background:linear-gradient(180deg,var(--ink2),var(--paper)); border:1px solid var(--line);
+    border-radius:16px; padding:18px; margin-top:18px; box-shadow:0 10px 40px rgba(0,0,0,.4)}
+  .vs{display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap}
+  .vs input{background:#120f2c; border:1px solid var(--line); color:var(--txt); font-size:17px;
+    padding:11px 14px; border-radius:10px; width:230px; text-align:center; font-family:inherit}
+  .vs input:focus{outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(217,178,90,.2)}
+  .vs .x{color:var(--gold); font-size:20px}
+  .hint{text-align:center; color:var(--dim); font-size:13px; margin:14px 0 6px; letter-spacing:1px}
+
+  .spread{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:10px}
+  @media(max-width:680px){.spread{grid-template-columns:repeat(2,1fr)}}
+  .slot{display:flex; flex-direction:column; align-items:center; gap:8px}
+  .slot .pos{font-size:13px; color:var(--gold2); letter-spacing:1px; min-height:18px}
+  .card{position:relative; width:100%; aspect-ratio:11/17; cursor:pointer; perspective:900px}
+  .card .inner{position:relative; width:100%; height:100%; transition:transform .7s cubic-bezier(.2,.8,.2,1);
+    transform-style:preserve-3d}
+  .card.flipped .inner{transform:rotateY(180deg)}
+  .face{position:absolute; inset:0; backface-visibility:hidden; border-radius:11px; display:flex;
+    flex-direction:column; align-items:center; justify-content:center; padding:8px; text-align:center}
+  .back{background:
+      repeating-linear-gradient(45deg,#241c4d 0 7px,#1c1540 7px 14px);
+    border:1px solid var(--gold); box-shadow:inset 0 0 18px rgba(217,178,90,.18)}
+  .back .sigil{font-size:30px; color:var(--gold); text-shadow:0 0 12px rgba(217,178,90,.5);
+    animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+  .front{background:linear-gradient(180deg,#fbf3dd,#efe2bd); color:#2a1c47; transform:rotateY(180deg);
+    border:1px solid var(--gold); box-shadow:inset 0 0 0 3px rgba(122,86,30,.25)}
+  .front.rev{transform:rotateY(180deg) rotate(180deg)}
+  .front .glyph{font-size:30px}
+  .front .nm{font-size:15px; font-weight:700; margin-top:4px; letter-spacing:1px}
+  .front .en{font-size:9.5px; color:#6a5836; letter-spacing:.5px}
+  .front .ori{position:absolute; top:6px; right:8px; font-size:10px; color:#8a6a2a; transform:rotate(0deg)}
+  .front.rev .ori{top:auto; bottom:6px; left:8px; right:auto}
+
+  .ctrl{display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap}
+  button{font-family:inherit; font-size:16px; letter-spacing:2px; padding:12px 24px; border-radius:30px;
+    cursor:pointer; border:1px solid var(--gold); transition:.2s}
+  .primary{background:linear-gradient(180deg,var(--gold2),var(--gold)); color:#2a1c10; font-weight:700}
+  .primary:disabled{opacity:.4; cursor:not-allowed; filter:grayscale(.4)}
+  .primary:not(:disabled):hover{box-shadow:0 0 24px rgba(217,178,90,.5); transform:translateY(-1px)}
+  .ghost{background:transparent; color:var(--gold2)}
+  .ghost:hover{background:rgba(217,178,90,.1)}
+
+  .reading{margin-top:22px; display:none; animation:rise .6s ease}
+  @keyframes rise{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:none}}
+  .reading h2{color:var(--gold2); font-size:20px; text-align:center; letter-spacing:3px; margin:0 0 6px}
+  .matchline{text-align:center; color:var(--dim); margin-bottom:14px}
+  .verdict{display:grid; gap:10px}
+  .vrow{display:grid; grid-template-columns:84px 1fr; gap:10px; align-items:start; padding:12px 14px;
+    background:#140f30; border:1px solid var(--line); border-radius:10px}
+  .vrow .k{color:var(--gold2); font-size:14px; letter-spacing:1px; padding-top:2px}
+  .vrow .v{font-size:15px; line-height:1.7}
+  .tag{display:inline-block; font-size:12px; padding:2px 9px; border-radius:20px; margin-right:6px;
+    border:1px solid var(--gold); color:var(--gold2)}
+  .scroll{margin-top:14px; padding:16px 18px; border-radius:12px; line-height:1.9; font-size:15px;
+    background:linear-gradient(180deg,#1a1438,#15102f); border:1px dashed var(--gold)}
+  .scroll .om{color:var(--gold2); font-style:italic}
+  .foot{margin-top:16px; text-align:center; color:var(--dim); font-size:12px; line-height:1.7}
+  .cards-detail{margin-top:14px; display:grid; gap:8px}
+  .cd{font-size:13.5px; color:var(--txt); padding:8px 12px; background:#130f2c; border-left:3px solid var(--gold);
+    border-radius:6px}
+  .cd b{color:var(--gold2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🔮 塔羅球神諭</h1>
+    <div class="sub">大 師 占 卜 ・ 為 你 的 比 賽 揭 開 天 機</div>
+  </header>
+
+  <div class="panel">
+    <div class="vs">
+      <input id="home" placeholder="主隊(如 摩洛哥)" autocomplete="off">
+      <span class="x">⚔</span>
+      <input id="away" placeholder="客隊(如 荷蘭)" autocomplete="off">
+    </div>
+    <div class="hint">輸入兩隊後,逐一點擊下方五張命運之牌,親手翻開你的牌陣</div>
+    <div class="spread" id="spread"></div>
+    <div class="ctrl">
+      <button class="primary" id="divineBtn" disabled>🔮 請大師開示</button>
+      <button class="ghost" id="resetBtn">🔄 重新洗牌</button>
+    </div>
+  </div>
+
+  <div class="panel reading" id="reading">
+    <h2>✦ 大 師 開 示 ✦</h2>
+    <div class="matchline" id="matchline"></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="cards-detail" id="cardsDetail"></div>
+    <div class="scroll" id="scroll"></div>
+    <div class="foot">命運由你親手抽出,僅供一笑。實戰請看模型,下注請自斟酌。🔮</div>
+  </div>
+</div>
+
+<script>
+/* ===== 22 張大阿爾克那 ===== */
+/* totals: over/under/mid(此牌落「大小分位」時的傾向,已尊重正逆位)
+   power : 持此牌的一方「能量」;正=強/升,負=弱/崩,0=中性/銅板
+   big   : 此牌落「讓分位」時是否傾向「決定性大勝/窄勝/銅板」 */
+const DECK = [
+ {en:"The Fool",zh:"愚者",g:"🃏",
+   up:{om:"無畏的新生力量,初生之犢不畏虎",tot:"mid",pow:1,dec:"small"},
+   rev:{om:"魯莽失足、一念之差的災難(送點/紅牌)",tot:"over",pow:-1,dec:"chaos"}},
+ {en:"The Magician",zh:"魔術師",g:"🪄",
+   up:{om:"掌控全場、點石成金、把握良機",tot:"over",pow:2,dec:"big"},
+   rev:{om:"法術失靈、良機盡墨、攻而不進",tot:"under",pow:-1,dec:"small"}},
+ {en:"The High Priestess",zh:"女祭司",g:"🌙",
+   up:{om:"深藏不露的鐵壁,玄機盡在沉默",tot:"under",pow:1,dec:"small"},
+   rev:{om:"鐵壁被看穿、隱憂浮現、防線洞開",tot:"over",pow:-1,dec:"big"}},
+ {en:"The Empress",zh:"皇后",g:"👑",
+   up:{om:"豐收與創造、進球如泉湧、從容孕育",tot:"over",pow:1,dec:"big"},
+   rev:{om:"創造受阻、沃土轉貧、贏而無洪流",tot:"under",pow:-1,dec:"small"}},
+ {en:"The Emperor",zh:"皇帝",g:"🏛",
+   up:{om:"紀律權威、城牆穩坐、秩序壓場",tot:"under",pow:2,dec:"small"},
+   rev:{om:"失序崩解、權威動搖",tot:"over",pow:-1,dec:"chaos"}},
+ {en:"The Hierophant",zh:"教皇",g:"⛪",
+   up:{om:"傳統底蘊、老牌經驗壓制新銳",tot:"under",pow:1,dec:"small"},
+   rev:{om:"打破常規、脫稿出擊、體制受挑戰",tot:"mid",pow:-1,dec:"chaos"}},
+ {en:"The Lovers",zh:"戀人",g:"💞",
+   up:{om:"勢均力敵、難分難捨、和諧契合",tot:"mid",pow:0,dec:"draw"},
+   rev:{om:"失衡、貌合神離、不協調",tot:"mid",pow:-1,dec:"chaos"}},
+ {en:"The Chariot",zh:"戰車",g:"🏇",
+   up:{om:"氣勢如虹、策馬奔騰、強勢輾壓",tot:"over",pow:2,dec:"big"},
+   rev:{om:"失控、衝勁瓦解、橫衝直撞",tot:"under",pow:-1,dec:"chaos"}},
+ {en:"Strength",zh:"力量",g:"🦁",
+   up:{om:"以柔克剛、韌性與意志、笑到最後",tot:"mid",pow:2,dec:"small"},
+   rev:{om:"定力盡失、心浮氣躁、壓不出威勢",tot:"mid",pow:-2,dec:"small"}},
+ {en:"The Hermit",zh:"隱者",g:"🏮",
+   up:{om:"謹慎保守、龜縮防守、低比分之夜",tot:"under",pow:0,dec:"small"},
+   rev:{om:"走出洞穴、防殼被打破、球終至",tot:"over",pow:1,dec:"big"}},
+ {en:"Wheel of Fortune",zh:"命運之輪",g:"🎡",
+   up:{om:"命運流轉、momentum 擺盪、天命無常",tot:"over",pow:0,dec:"chaos"},
+   rev:{om:"厄運纏身、時運不濟、輪盤背棄",tot:"mid",pow:-1,dec:"chaos"}},
+ {en:"Justice",zh:"正義",g:"⚖",
+   up:{om:"公正裁決、該贏的贏、實力勝出",tot:"mid",pow:1,dec:"big"},
+   rev:{om:"不公、爭議判罰、天秤傾斜(點球/VAR)",tot:"over",pow:0,dec:"chaos"}},
+ {en:"The Hanged Man",zh:"倒吊人",g:"🙃",
+   up:{om:"懸停與犧牲、僵局、以靜制動、門神時刻",tot:"under",pow:0,dec:"draw"},
+   rev:{om:"徒勞的犧牲、停滯、進退失據",tot:"under",pow:-1,dec:"small"}},
+ {en:"Death",zh:"死神",g:"💀",
+   up:{om:"蛻變終結、乾淨俐落的收割、決定性",tot:"mid",pow:2,dec:"big"},
+   rev:{om:"舊秩序被傾覆、了結被拖延、爆冷暗湧",tot:"under",pow:-1,dec:"chaos"}},
+ {en:"Temperance",zh:"節制",g:"☯",
+   up:{om:"平衡與調和、有來有往的流動",tot:"mid",pow:0,dec:"draw"},
+   rev:{om:"失衡、極端、節奏失控",tot:"over",pow:0,dec:"chaos"}},
+ {en:"The Devil",zh:"惡魔",g:"😈",
+   up:{om:"犯規紅牌、暗黑誘惑、混亂中見勝負",tot:"over",pow:0,dec:"chaos"},
+   rev:{om:"掙脫枷鎖、釋放、擺脫束縛",tot:"mid",pow:1,dec:"small"}},
+ {en:"The Tower",zh:"高塔",g:"🗼",
+   up:{om:"崩塌與劇變、城牆驟倒、晴天霹靂",tot:"over",pow:-2,dec:"chaos"},
+   rev:{om:"險中守住、崩塌被避免",tot:"under",pow:0,dec:"small"}},
+ {en:"The Star",zh:"星星",g:"⭐",
+   up:{om:"希望微光、柔和流動、暴雨後的新生",tot:"mid",pow:1,dec:"small"},
+   rev:{om:"希望黯淡、夢碎、靈光不再",tot:"under",pow:-1,dec:"small"}},
+ {en:"The Moon",zh:"月亮",g:"🌑",
+   up:{om:"迷霧與假象、焦慮、真假難辨的爭議",tot:"mid",pow:0,dec:"chaos"},
+   rev:{om:"迷霧散去、真相大白、撥雲見日",tot:"mid",pow:1,dec:"small"}},
+ {en:"The Sun",zh:"太陽",g:"☀",
+   up:{om:"光明燦爛、進球盛宴、大勝加冕",tot:"over",pow:2,dec:"big"},
+   rev:{om:"蒙塵的光、勝利打折、贏不痛快",tot:"under",pow:1,dec:"small"}},
+ {en:"Judgement",zh:"審判",g:"📯",
+   up:{om:"覺醒與復活、奮起反撲、號角響起",tot:"over",pow:2,dec:"big"},
+   rev:{om:"覺醒失敗、號角空響、火終難燃",tot:"under",pow:-2,dec:"small"}},
+ {en:"The World",zh:"世界",g:"🌍",
+   up:{om:"圓滿與完成、強者加冕、完美收官",tot:"mid",pow:2,dec:"big"},
+   rev:{om:"未竟全功、收尾不順、功虧一簣",tot:"mid",pow:-1,dec:"small"}},
+];
+const POSITIONS = ["主隊之牌","客隊之牌","大小分之牌","讓分之牌","隱藏因素"];
+
+/* ===== 狀態 ===== */
+let drawn = new Array(5).fill(null);   // {idx, rev}
+let usedIdx = new Set();
+
+const spread = document.getElementById('spread');
+const divineBtn = document.getElementById('divineBtn');
+const homeEl = document.getElementById('home'), awayEl = document.getElementById('away');
+
+function buildSpread(){
+  spread.innerHTML = '';
+  POSITIONS.forEach((p,i)=>{
+    const slot=document.createElement('div'); slot.className='slot';
+    slot.innerHTML=`<div class="pos">${p}</div>
+      <div class="card" data-i="${i}">
+        <div class="inner">
+          <div class="face back"><div class="sigil">✦</div></div>
+          <div class="face front"></div>
+        </div></div>`;
+    spread.appendChild(slot);
+  });
+  spread.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>flip(c)));
+}
+function flip(cardEl){
+  const i=+cardEl.dataset.i;
+  if(drawn[i]) return;                 // already drawn
+  // pick an unused card + random orientation
+  let idx;
+  do{ idx=Math.floor(Math.random()*DECK.length); }while(usedIdx.has(idx));
+  usedIdx.add(idx);
+  const rev = Math.random()<0.5;
+  drawn[i]={idx,rev};
+  const card=DECK[idx];
+  const front=cardEl.querySelector('.front');
+  front.classList.toggle('rev',rev);
+  front.innerHTML=`<div class="ori">${rev?'逆位':'正位'}</div>
+    <div class="glyph">${card.g}</div>
+    <div class="nm">${card.zh}</div>
+    <div class="en">${card.en}</div>`;
+  cardEl.classList.add('flipped');
+  checkReady();
+}
+function checkReady(){
+  const all = drawn.every(Boolean);
+  const named = homeEl.value.trim() && awayEl.value.trim();
+  divineBtn.disabled = !(all && named);
+}
+function reset(){
+  drawn=new Array(5).fill(null); usedIdx=new Set();
+  document.getElementById('reading').style.display='none';
+  buildSpread(); checkReady();
+}
+[homeEl,awayEl].forEach(e=>e.addEventListener('input',checkReady));
+document.getElementById('resetBtn').addEventListener('click',reset);
+divineBtn.addEventListener('click',divine);
+
+/* ===== 解牌引擎 ===== */
+function side(d){return d.rev?DECK[d.idx].rev:DECK[d.idx].up;}
+function name(d){return DECK[d.idx].zh+(d.rev?'(逆)':'(正)');}
+
+function divine(){
+  const H=homeEl.value.trim(), A=awayEl.value.trim();
+  const [hc,ac,tc,lc,xc]=drawn.map(side);
+
+  /* 大小分 */
+  const tot=tc.tot;
+  const totWord={over:'偏大 ⚽',under:'偏小 🔒',mid:'銅板 ⚖'}[tot];
+  const totLine={
+    over:`大小分牌【${name(drawn[2])}】示「偏大」── 進球之門開啟,留意 2.5 之上。`,
+    under:`大小分牌【${name(drawn[2])}】示「偏小」── 鐵壁低溫,留意 2.5 之下。`,
+    mid:`大小分牌【${name(drawn[2])}】示「銅板」── 球多球少兩可,貼著 2.5 臨界。`,
+  }[tot];
+
+  /* 勝負(主隊能量 vs 客隊能量) */
+  const hp=hc.pow, ap=ac.pow, diff=hp-ap;
+  let favName, favSide, resWord, resLine;
+  if(diff>=2){favName=H;favSide='home';resWord=`${H} 佔優`;
+    resLine=`主隊【${name(drawn[0])}】能量壓過客隊【${name(drawn[1])}】── ${H} 鋒芒在握。`;}
+  else if(diff===1){favName=H;favSide='home';resWord=`${H} 小幅領先`;
+    resLine=`主隊【${name(drawn[0])}】略勝客隊【${name(drawn[1])}】── ${H} 一線之優,窄勝氣息。`;}
+  else if(diff===0){favName=null;favSide='draw';resWord='銅板/平局';
+    resLine=`主客兩牌【${name(drawn[0])} ／ ${name(drawn[1])}】勢均力敵 ── 難分難捨,平局或拖入延長的氣息濃。`;}
+  else if(diff===-1){favName=A;favSide='away';resWord=`${A} 小幅領先`;
+    resLine=`客隊【${name(drawn[1])}】略勝主隊【${name(drawn[0])}】── ${A} 一線之優,客場有戲。`;}
+  else{favName=A;favSide='away';resWord=`${A} 佔優`;
+    resLine=`客隊【${name(drawn[1])}】能量壓過主隊【${name(drawn[0])}】── ${A} 鋒芒在握,爆冷或客勝。`;}
+
+  /* 讓分(由讓分牌的「決定性」+ 誰佔優) */
+  let ahLine;
+  const dec=lc.dec;
+  if(favSide==='draw'){
+    ahLine=`讓分牌【${name(drawn[3])}】落於銅板之局 ── 不宜讓盤,寧博平局 / 受讓一方 / DNB。`;
+  }else{
+    if(dec==='big' && Math.abs(diff)>=2)
+      ahLine=`讓分牌【${name(drawn[3])}】示「決定性」+ ${favName} 佔優 ── 可取 ${favName} −1,甚至更深。`;
+    else if(dec==='small'||dec==='draw')
+      ahLine=`讓分牌【${name(drawn[3])}】示「點到為止」── ${favName} 淺讓 −0.5 / DNB,忌追深盤。`;
+    else if(dec==='chaos')
+      ahLine=`讓分牌【${name(drawn[3])}】示「混沌」── ${favName} 略佔優但變數大(紅牌/點球/爭議),受讓方有暗利。`;
+    else
+      ahLine=`讓分牌【${name(drawn[3])}】── ${favName} 淺讓 −0.5 為宜。`;
+  }
+
+  /* 隱藏因素 */
+  const xLine=`隱藏因素【${name(drawn[4])}】── ${xc.om}。此乃藏於暗處的轉折,左右終局的那一手。`;
+
+  /* 一句話神諭 */
+  const omenBits=[];
+  omenBits.push(favSide==='draw'?'雙雄難分':(favName+'執牌'));
+  omenBits.push(tot==='over'?'球門洞開':tot==='under'?'鐵壁低鳴':'銅板輕響');
+  const chaos = [hc,ac,tc,lc,xc].some(s=>s.dec==='chaos');
+  if(chaos) omenBits.push('暗藏一記變數');
+  const omen=`「${omenBits.join('、')}——命運已落於牌上。」`;
+
+  /* 渲染 */
+  document.getElementById('matchline').innerHTML=`🏟 <b>${H}</b> &nbsp;⚔&nbsp; <b>${A}</b>`;
+  const v=document.getElementById('verdict');
+  v.innerHTML=`
+    <div class="vrow"><div class="k">勝負</div><div class="v"><span class="tag">${resWord}</span>${resLine}</div></div>
+    <div class="vrow"><div class="k">大小分</div><div class="v"><span class="tag">${totWord}</span>${totLine}</div></div>
+    <div class="vrow"><div class="k">讓分</div><div class="v">${ahLine}</div></div>
+    <div class="vrow"><div class="k">隱藏</div><div class="v">${xLine}</div></div>`;
+
+  const cd=document.getElementById('cardsDetail');
+  cd.innerHTML=drawn.map((d,i)=>`<div class="cd"><b>${POSITIONS[i]}</b> · ${name(d)} ── ${side(d).om}</div>`).join('');
+
+  document.getElementById('scroll').innerHTML=
+    `大師斂神,凝視五牌交織的命流……<br><span class="om">${omen}</span><br>` +
+    `——牌已收,香未盡。命運給了方向,落子的手仍是你自己的。`;
+
+  const r=document.getElementById('reading');
+  r.style.display='block';
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+buildSpread();
+</script>
+</body>
+</html>
