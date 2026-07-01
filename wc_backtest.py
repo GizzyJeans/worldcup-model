@@ -86,7 +86,8 @@ def walk_forward(played: pd.DataFrame, test: pd.DataFrame, cfg: dict,
             continue
         m = ExpertModel(dc_weight=cfg["dc_weight"],
                         half_life_days=cfg["half_life_days"],
-                        host_adv=cfg["host_adv"])
+                        host_adv=cfg["host_adv"],
+                        goal_cal=cfg.get("goal_cal", 1.0))
         m.fit(datamod.MatchData(played=train, upcoming=played.iloc[0:0]),
               asof=pd.Timestamp(dt))
         for _, r in grp.iterrows():
