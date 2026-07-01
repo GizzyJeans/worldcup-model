@@ -28,6 +28,10 @@ def main() -> None:
     ap.add_argument("--since", default="2014-01-01", help="earliest match date to fit on")
     ap.add_argument("--half-life", type=float, default=1460.0, help="recency half-life in days")
     ap.add_argument("--dc-weight", type=float, default=0.8, help="Dixon-Coles vs Elo blend [0-1]")
+    ap.add_argument("--goal-cal", type=float, default=1.16,
+                    help="expected-goals calibration (WC 2026 backtest: the base "
+                         "fit under-predicts goals ~1.16x; 1.0 = off). Persisted "
+                         "here so daily retrains keep the calibration.")
     ap.add_argument("--refresh", action="store_true", help="re-download the dataset first")
     ap.add_argument("--out", default=MODEL_PATH)
     args = ap.parse_args()
@@ -47,12 +51,12 @@ def main() -> None:
           f"(se {se:.3f}, n={n} host games)")
 
     model = ExpertModel(dc_weight=args.dc_weight, half_life_days=args.half_life,
-                        host_adv=host_adv)
+                        host_adv=host_adv, goal_cal=args.goal_cal)
     model.fit(md)
     model.save(args.out)
     print(f"Saved model -> {args.out}  (rho={model.dc.rho:+.4f}, "
           f"home_adv={model.dc.home_adv:+.3f}, host_adv=+{model.host_adv:.3f}, "
-          f"asof={model.asof.date()})")
+          f"goal_cal={model.goal_cal:.3f}, asof={model.asof.date()})")
 
     print("\nTop 15 by Elo:")
     for i, (team, r) in enumerate(model.elo.top(15), 1):
