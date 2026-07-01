@@ -20,12 +20,20 @@ def _ou_line(market: str) -> float:
 
 class ExpertModel:
     def __init__(self, dc_weight: float = 0.8, half_life_days: float = 1460.0,
-                 host_adv: float = 0.39):
+                 host_adv: float = 0.39, goal_cal: float = 1.0):
         # dc_weight blends Dixon-Coles vs Elo at the expected-goals level.
         # host_adv: extra goal-supremacy for a World Cup host (see host.py).
+        # goal_cal: multiplicative calibration on expected goals. The base fit
+        #   (trained on all internationals, incl. cagey qualifiers/friendlies)
+        #   under-predicts goals at a high-scoring World Cup -- a walk-forward
+        #   check on WC 2026 showed predicted 2.53 vs actual 2.94 total goals
+        #   (over-2.5 predicted 42% vs actual 52%; favourite handicap covers
+        #   under-predicted at -1/-1.5/-2). Scaling lam,mu up corrects the
+        #   totals AND the favourite-margin bias in one parameter. 1.0 = off.
         self.dc_weight = dc_weight
         self.half_life_days = half_life_days
         self.host_adv = host_adv
+        self.goal_cal = goal_cal
         self.dc = DixonColes()
         self.elo = EloModel()
         self.asof: pd.Timestamp | None = None
@@ -47,6 +55,8 @@ class ExpertModel:
         w = self.dc_weight
         lam = w * ld + (1 - w) * le
         mu = w * md_ + (1 - w) * me
+        lam *= self.goal_cal   # tournament goal calibration (see __init__)
+        mu *= self.goal_cal
         if host:  # shift supremacy toward the host, keeping total goals ~fixed
             s = self.host_adv / 2.0
             lam, mu = lam + s, mu - s
@@ -122,6 +132,7 @@ class ExpertModel:
             "dc_weight": self.dc_weight,
             "half_life_days": self.half_life_days,
             "host_adv": self.host_adv,
+            "goal_cal": self.goal_cal,
             "asof": None if self.asof is None else self.asof.isoformat(),
             "dc": {
                 "home_adv": self.dc.home_adv,
@@ -146,7 +157,8 @@ class ExpertModel:
         with open(path, encoding="utf-8") as f:
             blob = json.load(f)
         m = cls(dc_weight=blob["dc_weight"], half_life_days=blob["half_life_days"],
-                host_adv=blob.get("host_adv", 0.39))
+                host_adv=blob.get("host_adv", 0.39),
+                goal_cal=blob.get("goal_cal", 1.0))
         m.asof = None if blob["asof"] is None else pd.Timestamp(blob["asof"])
         d = blob["dc"]
         m.dc.home_adv, m.dc.rho, m.dc.teams = d["home_adv"], d["rho"], d["teams"]
