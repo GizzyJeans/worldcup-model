@@ -1,20 +1,23 @@
-# World Cup value scan — 2026-07-15 08:41 UTC
+# World Cup value scan — 2026-07-16 08:39 UTC
 
 Line-shop discrepancies vs the sharp consensus (model anchored to market).
 These are small, perishable, and not a proven edge — verify before betting.
 
 ```
-1 upcoming events with odds  |  quota left: 304  (used 196)
+2 upcoming events with odds  |  quota left: 298  (used 202)
 
-England v Argentina   (42 books)
-  consensus:  H 35%  D 33%  A 32%
-  best price: HOME 2.86 [Matchbook]  DRAW 3.06 [1xBet]  AWAY 3.15 [Smarkets]
+France v England   (40 books)
+  consensus:  H 50%  D 25%  A 25%
+  best price: HOME 2.00 [Nordic Bet]  DRAW 4.00 [Smarkets]  AWAY 4.00 [Tipico]
+Spain v Argentina   (40 books)
+  consensus:  H 41%  D 32%  A 27%
+  best price: HOME 2.39 [1xBet]  DRAW 3.12 [MyBookie.a]  AWAY 3.85 [Betfair]
 
 Value scan (model anchored to sharp market, line-shopped):
-  England v Argentina  AWAY        @ 3.15 (Smarkets)  fair 32.6%  EV +2.6%  stake 30
-  England v Argentina  AH A -0     @ 2.10 (Matchbook)  fair 48.6%  EV +2.1%  stake 47
+  France v England  AWAY        @ 4.00 (Tipico)  fair 25.7%  EV +2.7%  stake 23
+  Spain v Argentina  AWAY        @ 3.85 (Betfair)  fair 26.7%  EV +2.7%  stake 24
 
   2 prices beat the sharp line (model blended to market at w=0.9). Line-shop discrepancies, not model edges — small, perishable, verify before betting.
 
-quota remaining: 304
+quota remaining: 298
 ```
