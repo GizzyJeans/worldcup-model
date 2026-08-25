@@ -1,14 +1,14 @@
-# World Cup value scan — 2026-08-24 07:36 UTC
+# World Cup value scan — 2026-08-25 07:23 UTC
 
 Line-shop discrepancies vs the sharp consensus (model anchored to market).
 These are small, perishable, and not a proven edge — verify before betting.
 
 ```
-0 upcoming events with odds  |  quota left: 324  (used 176)
+0 upcoming events with odds  |  quota left: 318  (used 182)
 
 
 Value scan (model anchored to sharp market, line-shopped):
   No line-shopping value vs the sharp line (as expected most days).
 
-quota remaining: 324
+quota remaining: 318
 ```
