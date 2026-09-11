@@ -1,4 +1,4 @@
-# World Cup value scan — 2026-09-10 11:37 UTC
+# World Cup value scan — 2026-09-11 11:38 UTC
 
 Line-shop discrepancies vs the sharp consensus (model anchored to market).
 These are small, perishable, and not a proven edge — verify before betting.
